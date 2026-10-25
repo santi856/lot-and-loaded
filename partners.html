@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partners — Register a Parcel | Lot & Loaded</title>
+<meta name="description" content="Register a commercial parcel with the house. 30-day lock, HQ prices every offer, 50/50 of the fee actually collected.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site-head">
+    <a class="brand" href="index.html">LOT &amp; <span>LOADED</span></a>
+    <nav>
+      <a href="builders.html">Builders</a>
+      <a href="partners.html">Partners</a>
+      <a href="sell.html">Sell your property</a>
+    </nav>
+  </header>
+
+  <div class="form-shell">
+    <p class="eyebrow">Partner lead registration</p>
+    <h1 style="font-size:30px;">Register a parcel.</h1>
+    <p class="lede" style="font-size:16.5px;">Register before first contact and the lead is locked to you for
+    <strong>30 days</strong>. HQ runs the full gate and prices every offer — no offer goes to a seller
+    until the house runs it. You keep <strong>50% of the net assignment fee actually collected</strong>,
+    paid when the fee lands. 100% commission — no salary, no hourly, no draw.
+    Free to join. No membership fees — we make money when deals close, same as you.</p>
+
+    <form id="leadForm" novalidate>
+      <span class="q">You</span>
+      <label class="field"><span>Your name *</span>
+        <input type="text" name="partner_name" required autocomplete="name"></label>
+      <label class="field"><span>Email *</span>
+        <input type="email" name="partner_email" required autocomplete="email"></label>
+      <label class="field"><span>Phone *</span>
+        <input type="tel" name="partner_phone" required autocomplete="tel"></label>
+      <label class="field"><span>Languages you work in</span>
+        <input type="text" name="languages" placeholder="English / Spanish — a third language is the fast lane"></label>
+
+      <span class="q" style="margin-top:26px;">The parcel</span>
+      <label class="field"><span>Property address *</span>
+        <input type="text" name="property_address" required placeholder="Street, city, state"></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <label class="field"><span>Acreage</span>
+          <input type="number" name="acreage" min="0" step="0.01" inputmode="decimal"></label>
+        <label class="field"><span>Zoning (as listed by the county appraiser)</span>
+          <input type="text" name="zoning" placeholder="e.g. I-1, IU-2"></label>
+      </div>
+      <label class="field"><span>Owner name *</span>
+        <input type="text" name="owner_name" required placeholder="Person or entity — the signer, not a gatekeeper"></label>
+      <label class="field"><span>Owner phone (skip-traced) *</span>
+        <input type="tel" name="owner_phone" required></label>
+      <p class="q-help">A lead isn't a lead without the owner and a phone that reaches them. If you don't have them yet, get them first — then register.</p>
+      <label class="field"><span>Asking price (if listed)</span>
+        <input type="text" name="asking_price" placeholder="$ — listed deals need 90+ days on market"></label>
+      <label class="field"><span>Where does it stand?</span>
+        <select name="deal_status">
+          <option value="">Select…</option>
+          <option>Off-market — no contact yet</option>
+          <option>Off-market — in conversation</option>
+          <option>Listed — 90+ days on market</option>
+          <option>Tax deed / foreclosure exposure</option>
+          <option>Under contract with the house</option>
+        </select></label>
+      <label class="field"><span>Anything HQ should know — motivation, condition, site flags</span>
+        <textarea name="notes" placeholder="Distress evidence, teardown profile, vacancy, long tenure, environmental flags…"></textarea></label>
+
+      <p class="err" id="errBox"></p>
+      <div class="form-nav">
+        <button type="submit" class="btn" id="submitBtn">Register this parcel</button>
+      </div>
+      <p class="small" style="margin-top:12px;">Submitting registers the lead under your name with a 30-day lock,
+      starting now. Unregistered leads are not protected. Hand-worked outreach only — your own phone, your own accounts.</p>
+    </form>
+
+    <div class="done-card" id="doneCard" style="display:none;">
+      <h2>Registered.</h2>
+      <p>Your 30-day lock starts now. HQ runs the gate — criteria fit, numbers, comps, buyer match —
+      and comes back with the number. No offer goes to the seller before that, from anyone.</p>
+      <p class="small" id="doneMode"></p>
+    </div>
+  </div>
+
+  <footer class="site-foot">Lot & Loaded — partner registration. Terms: 50/50 of the fee actually collected, paid when collected.</footer>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var form = document.getElementById("leadForm");
+  var errBox = document.getElementById("errBox");
+  var btn = document.getElementById("submitBtn");
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var req = form.querySelectorAll("[required]");
+    for (var i = 0; i < req.length; i++) {
+      if (!req[i].value.trim()) { errBox.textContent = "Please fill in the starred fields."; req[i].focus(); return; }
+    }
+    var email = form.querySelector('[name="partner_email"]');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)) { errBox.textContent = "That email doesn't look complete."; email.focus(); return; }
+    btn.disabled = true; btn.textContent = "Registering…";
+    var d = {};
+    new FormData(form).forEach(function (v, k) { d[k] = String(v).trim(); });
+    var payload = {
+      partner_name: d.partner_name || null, partner_email: d.partner_email || null,
+      property_address: d.property_address || null, payload: d
+    };
+    window.LotLoaded.submit("lead", window.PLATFORM_CONFIG.LEAD_TABLE, payload).then(function (r) {
+      form.style.display = "none";
+      var card = document.getElementById("doneCard");
+      card.style.display = "block";
+      document.getElementById("doneMode").textContent =
+        r.mode === "live" ? "" :
+        "Note: saved on this device only — our live intake connection is being switched on. " +
+        "So your lock is on record with us today, text the parcel details to (838) 304-3003.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+})();
+</script>
+</body>
+</html>

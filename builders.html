@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Builders — Get Qualified | Lot & Loaded</title>
+<meta name="description" content="Qualify for first look at off-market commercial parcels priced at 65% of builder value. We qualify builders on closing pace.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site-head">
+    <a class="brand" href="index.html">LOT &amp; <span>LOADED</span></a>
+    <nav>
+      <a href="builders.html">Builders</a>
+      <a href="partners.html">Partners</a>
+      <a href="sell.html">Sell your property</a>
+    </nav>
+  </header>
+
+  <div class="form-shell">
+    <p class="eyebrow">Builder qualification</p>
+    <h1 style="font-size:30px;">Get qualified for first look.</h1>
+    <p class="lede" style="font-size:16.5px;">Five short steps. We ask what you build, how fast you close,
+    and how you evidence funds — because deals here are presented on a clock, and only qualified
+    builders receive them. Nothing you share is sold or shared outside our deal process.
+    Free to join. No membership fees — we make money when deals close, same as you.</p>
+
+    <div class="progress" id="progress"><div></div><div></div><div></div><div></div><div></div></div>
+
+    <form id="builderForm" novalidate>
+      <!-- STEP 1 — company & contact -->
+      <section class="step active" data-step="1">
+        <span class="q">Your company</span>
+        <label class="field"><span>Company name *</span>
+          <input type="text" name="company" required autocomplete="organization"></label>
+        <label class="field"><span>Your name *</span>
+          <input type="text" name="contact_name" required autocomplete="name"></label>
+        <label class="field"><span>Your role</span>
+          <input type="text" name="role" placeholder="Owner, acquisitions, development…"></label>
+        <label class="field"><span>Email *</span>
+          <input type="email" name="email" required autocomplete="email"></label>
+        <label class="field"><span>Phone *</span>
+          <input type="tel" name="phone" required autocomplete="tel"></label>
+        <span class="q" style="font-size:16px;">Is that number on WhatsApp?</span>
+        <div class="radios">
+          <label><input type="radio" name="whatsapp" value="yes"> Yes</label>
+          <label><input type="radio" name="whatsapp" value="no"> No</label>
+          <label><input type="radio" name="whatsapp" value="unknown"> Not sure</label>
+        </div>
+      </section>
+
+      <!-- STEP 2 — what you build -->
+      <section class="step" data-step="2">
+        <span class="q">What you build</span>
+        <label class="field"><span>Most recent completed project — what and where?</span>
+          <input type="text" name="recent_project" placeholder="e.g. 200K SF spec warehouse, Dallas TX — finished March"></label>
+        <span class="q" style="font-size:16px;">What do you buy?</span>
+        <div class="checks">
+          <label><input type="checkbox" name="asset_types" value="industrial-land"> Industrial / warehouse land</label>
+          <label><input type="checkbox" name="asset_types" value="teardown-redevelopment"> Teardown / redevelopment sites</label>
+          <label><input type="checkbox" name="asset_types" value="ios"> Industrial outdoor storage (IOS) / yards</label>
+          <label><input type="checkbox" name="asset_types" value="retail-commercial"> Retail / commercial parcels</label>
+          <label><input type="checkbox" name="asset_types" value="mixed-use"> Mixed-use sites</label>
+          <label><input type="checkbox" name="asset_types" value="value-add-buildings"> Existing industrial buildings (value-add)</label>
+        </div>
+        <label class="field"><span>Geographies you buy in</span>
+          <input type="text" name="geographies" placeholder="e.g. South Florida tri-county; DFW; Phoenix"></label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <label class="field"><span>Min acres</span>
+            <input type="number" name="min_acres" min="0" step="0.1" inputmode="decimal"></label>
+          <label class="field"><span>Max acres</span>
+            <input type="number" name="max_acres" min="0" step="0.1" inputmode="decimal"></label>
+        </div>
+        <label class="field"><span>Typical deal size</span>
+          <select name="deal_size">
+            <option value="">Select…</option>
+            <option>Under $2M</option><option>$2M – $10M</option>
+            <option>$10M – $50M</option><option>$50M+</option>
+          </select></label>
+      </section>
+
+      <!-- STEP 3 — pace -->
+      <section class="step" data-step="3">
+        <span class="q">Your pace</span>
+        <p class="q-help">This is the part that matters most here. Our standard is quality and
+        time — sellers get a fast, certain close, so we qualify builders on how fast they actually close.</p>
+        <label class="field"><span>Closings in the last 12 months (land or sites)</span>
+          <input type="number" name="closings_12mo" min="0" inputmode="numeric"></label>
+        <label class="field"><span>Typical days-to-close once terms are agreed</span>
+          <select name="days_to_close">
+            <option value="">Select…</option>
+            <option>Under 21 days</option><option>21 – 30 days</option>
+            <option>31 – 45 days</option><option>46 – 60 days</option><option>Over 60 days</option>
+          </select></label>
+        <label class="field"><span>What drove your fastest close?</span>
+          <input type="text" name="fastest_close" placeholder="e.g. Cash ready, no committee — 14 days"></label>
+        <label class="field"><span>When we present a deal that fits, how fast do you answer?</span>
+          <select name="answer_speed">
+            <option value="">Select…</option>
+            <option>Within 24 hours</option><option>Within 48 hours</option>
+            <option>Within a week</option><option>It varies</option>
+          </select></label>
+      </section>
+
+      <!-- STEP 4 — funds & authority -->
+      <section class="step" data-step="4">
+        <span class="q">Funds &amp; authority</span>
+        <p class="q-help">We verify proof of funds before any contract is assigned.
+        It protects you as much as it protects our sellers.</p>
+        <label class="field"><span>Is the money in place for your next deal?</span>
+          <select name="funds_status">
+            <option value="">Select…</option>
+            <option>Yes — equity / cash on hand</option>
+            <option>Yes — fund or line of credit</option>
+            <option>Raised per deal</option>
+            <option>Not yet</option>
+          </select></label>
+        <label class="field"><span>How do you usually evidence it?</span>
+          <input type="text" name="pof_method" placeholder="Bank statement, fund letter, lender letter…"></label>
+        <span class="q" style="font-size:16px;">Who decides on a site?</span>
+        <div class="radios">
+          <label><input type="radio" name="authority" value="i-decide"> I decide</label>
+          <label><input type="radio" name="authority" value="partner"> I decide with a partner</label>
+          <label><input type="radio" name="authority" value="committee"> It goes to a committee / IC</label>
+        </div>
+        <span class="q" style="font-size:16px;">We originate by contract assignment — our fee is inside the assignment, title runs it. Any problem closing on an assignment?</span>
+        <div class="radios">
+          <label><input type="radio" name="assignment_ok" value="yes"> No problem</label>
+          <label><input type="radio" name="assignment_ok" value="depends"> Depends on the deal</label>
+          <label><input type="radio" name="assignment_ok" value="no"> Yes, that's a problem</label>
+        </div>
+        <label class="field"><span>What do you typically put up as earnest money, and how fast after signing?</span>
+          <input type="text" name="emd_behavior" placeholder="e.g. $25K within 3 business days"></label>
+      </section>
+
+      <!-- STEP 5 — review & submit -->
+      <section class="step" data-step="5">
+        <span class="q">Review</span>
+        <p class="q-help">One look before it comes to us. Submitting means you understand the standard:
+        deals are presented with a first-look window and a closing pace agreed up front.
+        If a deal can't be performed on at pace, it's not a fit — no hard feelings either way.</p>
+        <div class="review" id="reviewBox"></div>
+      </section>
+
+      <p class="err" id="errBox"></p>
+      <div class="form-nav">
+        <button type="button" class="btn secondary back" id="backBtn" style="visibility:hidden;">Back</button>
+        <button type="button" class="btn" id="nextBtn">Continue</button>
+      </div>
+    </form>
+
+    <div class="done-card" id="doneCard" style="display:none;">
+      <h2>You're in the queue.</h2>
+      <p>Thanks — your qualification is with us. We review every submission by hand and grade it
+      on pace and fit. If you're qualified, the first parcel that fits your box comes to you
+      before anyone else. If we need anything else, we'll reach out on the number you gave us.</p>
+      <p class="small" id="doneMode"></p>
+    </div>
+  </div>
+
+  <footer class="site-foot">Lot & Loaded — builder qualification. Only qualified builders receive deal drops.</footer>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
+  var bars = document.querySelectorAll("#progress div");
+  var backBtn = document.getElementById("backBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  var errBox = document.getElementById("errBox");
+  var current = 0;
+
+  function show(i) {
+    steps.forEach(function (s, idx) { s.classList.toggle("active", idx === i); });
+    bars.forEach(function (b, idx) { b.classList.toggle("on", idx <= i); });
+    backBtn.style.visibility = i === 0 ? "hidden" : "visible";
+    nextBtn.textContent = i === steps.length - 1 ? "Submit qualification" : "Continue";
+    errBox.textContent = "";
+    if (i === steps.length - 1) fillReview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function stepValid(i) {
+    var req = steps[i].querySelectorAll("[required]");
+    for (var k = 0; k < req.length; k++) {
+      if (!req[k].value.trim()) { errBox.textContent = "Please fill in the starred fields before continuing."; req[k].focus(); return false; }
+      if (req[k].type === "email" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(req[k].value)) { errBox.textContent = "That email doesn't look complete."; req[k].focus(); return false; }
+    }
+    return true;
+  }
+
+  function collect() {
+    var data = {};
+    var fd = new FormData(document.getElementById("builderForm"));
+    data.asset_types = fd.getAll("asset_types");
+    fd.forEach(function (v, k) { if (k !== "asset_types") data[k] = String(v).trim(); });
+    return data;
+  }
+
+  function fillReview() {
+    var d = collect(), lines = [];
+    Object.keys(d).forEach(function (k) {
+      var v = Array.isArray(d[k]) ? d[k].join(", ") : d[k];
+      if (v) lines.push(k.replace(/_/g, " ") + ": " + v);
+    });
+    document.getElementById("reviewBox").textContent = lines.join("\n");
+  }
+
+  backBtn.addEventListener("click", function () { if (current > 0) { current--; show(current); } });
+  nextBtn.addEventListener("click", function () {
+    if (current < steps.length - 1) {
+      if (!stepValid(current)) return;
+      current++; show(current); return;
+    }
+    if (!stepValid(0)) { current = 0; show(0); return; }
+    nextBtn.disabled = true; nextBtn.textContent = "Sending…";
+    var d = collect();
+    var payload = {
+      company: d.company || null, contact_name: d.contact_name || null,
+      email: d.email || null, phone: d.phone || null, payload: d
+    };
+    window.LotLoaded.submit("builder", window.PLATFORM_CONFIG.BUILDER_TABLE, payload).then(function (r) {
+      document.getElementById("builderForm").style.display = "none";
+      document.querySelector(".form-nav").style.display = "none";
+      document.getElementById("progress").style.display = "none";
+      var card = document.getElementById("doneCard");
+      card.style.display = "block";
+      document.getElementById("doneMode").textContent =
+        r.mode === "live" ? "" :
+        "Note: your answers were saved on this device only — our live intake connection is being switched on. " +
+        "So nothing waits on us, text the same details to (838) 304-3003 and we'll take it from there.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+
+  show(0);
+})();
+</script>
+</body>
+</html>

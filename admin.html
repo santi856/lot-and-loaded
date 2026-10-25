@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HQ — Lot & Loaded Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap" style="max-width:1200px;">
+  <header class="site-head">
+    <a class="brand" href="index.html">LOT &amp; <span>LOADED</span> · HQ</a>
+    <nav><a href="index.html">Site</a></nav>
+  </header>
+
+  <div style="padding:26px 0 40px;">
+    <h1 style="font-size:28px;">Signups &amp; registrations</h1>
+    <p class="small" style="max-width:760px;">Two ways this page fills:
+    <b>(1) Live</b> — paste the project's <b>service_role</b> key below (kept only in this tab's
+    session storage, never written to the site) and load all three tables from Supabase.
+    <b>(2) Local</b> — if the site is running in fallback mode, submissions saved on <i>this</i>
+    device/browser are listed automatically. Full spec is in SETUP.md.</p>
+
+    <label class="field" style="max-width:760px;"><span>Service role key (live mode)</span>
+      <input type="text" id="svcKey" placeholder="eyJ… (Supabase → Settings → API → service_role)" autocomplete="off"></label>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn" id="loadBtn" style="width:auto;">Load live data</button>
+      <button class="btn secondary" id="csvBtn" style="width:auto;">Export local submissions (CSV)</button>
+    </div>
+    <p class="err" id="errBox"></p>
+
+    <h2 style="margin-top:34px;">Builder qualifications</h2>
+    <div class="table-scroll"><table class="grid" id="builderTable"><thead></thead><tbody></tbody></table></div>
+    <p class="small" id="builderEmpty">Nothing loaded yet.</p>
+
+    <h2 style="margin-top:34px;">Partner lead registrations</h2>
+    <div class="table-scroll"><table class="grid" id="leadTable"><thead></thead><tbody></tbody></table></div>
+    <p class="small" id="leadEmpty">Nothing loaded yet.</p>
+
+    <h2 style="margin-top:34px;">Seller property submissions</h2>
+    <div class="table-scroll"><table class="grid" id="sellerTable"><thead></thead><tbody></tbody></table></div>
+    <p class="small" id="sellerEmpty">Nothing loaded yet.</p>
+  </div>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var errBox = document.getElementById("errBox");
+  var svcInput = document.getElementById("svcKey");
+  svcInput.value = sessionStorage.getItem("ll_service_key") || "";
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function render(tableId, emptyId, rows) {
+    var table = document.getElementById(tableId);
+    var empty = document.getElementById(emptyId);
+    if (!rows.length) { table.querySelector("thead").innerHTML = ""; table.querySelector("tbody").innerHTML = ""; empty.textContent = "No rows."; return; }
+    empty.textContent = rows.length + " row(s).";
+    var flat = rows.map(function (r) {
+      var out = { received: r.created_at || r.saved_at || "" };
+      var p = r.payload && typeof r.payload === "object" ? r.payload : r;
+      Object.keys(p).forEach(function (k) { if (k !== "payload") out[k] = Array.isArray(p[k]) ? p[k].join(", ") : p[k]; });
+      return out;
+    });
+    var cols = [];
+    flat.forEach(function (r) { Object.keys(r).forEach(function (k) { if (cols.indexOf(k) < 0) cols.push(k); }); });
+    table.querySelector("thead").innerHTML = "<tr>" + cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr>";
+    table.querySelector("tbody").innerHTML = flat.map(function (r) {
+      return "<tr>" + cols.map(function (c) { return "<td>" + esc(r[c]) + "</td>"; }).join("") + "</tr>";
+    }).join("");
+  }
+
+  function renderLocal() {
+    var all = window.LotLoaded.readLocal();
+    render("builderTable", "builderEmpty", all.filter(function (x) { return x.kind === "builder"; })
+      .map(function (x) { return { saved_at: x.saved_at, payload: x.payload.payload || x.payload }; }));
+    render("leadTable", "leadEmpty", all.filter(function (x) { return x.kind === "lead"; })
+      .map(function (x) { return { saved_at: x.saved_at, payload: x.payload.payload || x.payload }; }));
+    render("sellerTable", "sellerEmpty", all.filter(function (x) { return x.kind === "seller"; })
+      .map(function (x) { return { saved_at: x.saved_at, payload: x.payload.payload || x.payload }; }));
+  }
+
+  document.getElementById("loadBtn").addEventListener("click", function () {
+    var key = svcInput.value.trim();
+    if (!key) { errBox.textContent = "Paste the service_role key first — or use the local view below."; renderLocal(); return; }
+    sessionStorage.setItem("ll_service_key", key);
+    errBox.textContent = "";
+    var cfg = window.PLATFORM_CONFIG;
+    Promise.all([
+      window.LotLoaded.fetchRows(cfg.BUILDER_TABLE, key),
+      window.LotLoaded.fetchRows(cfg.LEAD_TABLE, key),
+      window.LotLoaded.fetchRows(cfg.SELLER_TABLE, key)
+    ]).then(function (res) {
+      render("builderTable", "builderEmpty", res[0]);
+      render("leadTable", "leadEmpty", res[1]);
+      render("sellerTable", "sellerEmpty", res[2]);
+    }).catch(function (e) {
+      errBox.textContent = "Live load failed (" + e.message + "). Check the key and that SETUP.md step 1 has been run. Showing local submissions instead.";
+      renderLocal();
+    });
+  });
+
+  document.getElementById("csvBtn").addEventListener("click", function () {
+    var all = window.LotLoaded.readLocal();
+    if (!all.length) { errBox.textContent = "No local submissions on this device."; return; }
+    var lines = ["kind,saved_at,summary"];
+    all.forEach(function (x) {
+      var p = x.payload.payload || x.payload;
+      var summary = Object.keys(p).map(function (k) { return k + "=" + (Array.isArray(p[k]) ? p[k].join(";") : p[k]); }).join(" | ");
+      lines.push([x.kind, x.saved_at, '"' + summary.replace(/"/g, '""') + '"'].join(","));
+    });
+    var blob = new Blob([lines.join("\n")], { type: "text/csv" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "lot-and-loaded-local-submissions.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  renderLocal();
+})();
+</script>
+</body>
+</html>

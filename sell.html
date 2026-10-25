@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sell Your Property | Lot & Loaded</title>
+<meta name="description" content="Own commercial or industrial property you want to sell — land, a warehouse or industrial building, a teardown or redevelopment site? Tell us about it. Cash, as-is, fast and certain close — no listing, no showings, no broker fees.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site-head">
+    <a class="brand" href="index.html">LOT &amp; <span>LOADED</span></a>
+    <nav>
+      <a href="builders.html">Builders</a>
+      <a href="partners.html">Partners</a>
+      <a href="sell.html">Sell your property</a>
+    </nav>
+  </header>
+
+  <div class="form-shell">
+    <p class="eyebrow">For property owners</p>
+    <h1 style="font-size:30px;">Selling your property?</h1>
+    <p class="lede" style="font-size:16.5px;">We buy commercial and industrial property directly — <strong>land,
+    warehouses and industrial buildings, teardown and redevelopment sites, outdoor storage yards</strong> —
+    <strong>cash, as-is, fast and certain close</strong>. No listing, no showings, no broker fees, nothing
+    out of your pocket. Tell us about the property and, if it fits the builders we work with, we come back
+    with a real number fast — priced off what builders actually pay for property like yours, not a guess.
+    If it doesn't fit, we'll tell you that too. Free — sellers never pay us anything.</p>
+
+    <form id="sellerForm" novalidate>
+      <span class="q">You</span>
+      <label class="field"><span>Your name *</span>
+        <input type="text" name="owner_name" required autocomplete="name"></label>
+      <label class="field"><span>Email *</span>
+        <input type="email" name="owner_email" required autocomplete="email"></label>
+      <label class="field"><span>Phone *</span>
+        <input type="tel" name="owner_phone" required autocomplete="tel"></label>
+      <span class="q" style="font-size:16px;">Is that number on WhatsApp?</span>
+      <div class="radios">
+        <label><input type="radio" name="whatsapp" value="yes"> Yes</label>
+        <label><input type="radio" name="whatsapp" value="no"> No</label>
+        <label><input type="radio" name="whatsapp" value="unknown"> Not sure</label>
+      </div>
+      <span class="q" style="font-size:16px;">Your connection to the property</span>
+      <div class="radios">
+        <label><input type="radio" name="authority" value="i-own-it"> I own it</label>
+        <label><input type="radio" name="authority" value="owner-in-entity"> I'm an owner in the entity that owns it</label>
+        <label><input type="radio" name="authority" value="represent-owner"> I represent the owner</label>
+      </div>
+
+      <span class="q" style="margin-top:26px;">The property</span>
+      <label class="field"><span>Property address *</span>
+        <input type="text" name="property_address" required placeholder="Street, city, state"></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <label class="field"><span>Acreage</span>
+          <input type="number" name="acreage" min="0" step="0.01" inputmode="decimal"></label>
+        <label class="field"><span>Zoning (if you know it)</span>
+          <input type="text" name="zoning" placeholder="e.g. I-1, IU-2, commercial"></label>
+      </div>
+      <label class="field"><span>What is the property?</span>
+        <select name="current_use">
+          <option value="">Select…</option>
+          <option>Vacant land</option>
+          <option>Warehouse / industrial building</option>
+          <option>Other building</option>
+          <option>Outdoor storage / yard</option>
+          <option>Mixed / other</option>
+        </select></label>
+      <label class="field"><span>Asking price (if you have one — fine to leave blank)</span>
+        <input type="text" name="asking_price" placeholder="$"></label>
+      <label class="field"><span>How soon would you want to close?</span>
+        <select name="timeline">
+          <option value="">Select…</option>
+          <option>Ready now — the faster the better</option>
+          <option>30 – 60 days works</option>
+          <option>Flexible — exploring my options</option>
+        </select></label>
+      <label class="field"><span>Anything we should know — the situation, condition, tenants, taxes</span>
+        <textarea name="notes" placeholder="Why you're selling, anything on the property, anything owed on it…"></textarea></label>
+
+      <p class="err" id="errBox"></p>
+      <div class="form-nav">
+        <button type="submit" class="btn" id="submitBtn">Send us the property</button>
+      </div>
+      <p class="small" style="margin-top:12px;">Nothing you share is sold or shared outside our deal process.
+      Sending this is not a contract and doesn't obligate you to anything — it just starts the conversation.</p>
+    </form>
+
+    <div class="done-card" id="doneCard" style="display:none;">
+      <h2>Got it.</h2>
+      <p>Your property is with us. We run every property through the same gate — zoning, acreage,
+      recorded sales of similar property — and if it fits our builders, you hear back with a real number
+      fast. If it doesn't fit, we'll tell you that instead of going quiet.</p>
+      <p class="small" id="doneMode"></p>
+    </div>
+  </div>
+
+  <footer class="site-foot">Lot & Loaded — we buy commercial and industrial property directly. Cash, as-is, fast close.</footer>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var form = document.getElementById("sellerForm");
+  var errBox = document.getElementById("errBox");
+  var btn = document.getElementById("submitBtn");
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var req = form.querySelectorAll("[required]");
+    for (var i = 0; i < req.length; i++) {
+      if (!req[i].value.trim()) { errBox.textContent = "Please fill in the starred fields."; req[i].focus(); return; }
+    }
+    var email = form.querySelector('[name="owner_email"]');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)) { errBox.textContent = "That email doesn't look complete."; email.focus(); return; }
+    btn.disabled = true; btn.textContent = "Sending…";
+    var d = {};
+    new FormData(form).forEach(function (v, k) { d[k] = String(v).trim(); });
+    var payload = {
+      owner_name: d.owner_name || null, owner_email: d.owner_email || null,
+      property_address: d.property_address || null, payload: d
+    };
+    window.LotLoaded.submit("seller", window.PLATFORM_CONFIG.SELLER_TABLE, payload).then(function (r) {
+      form.style.display = "none";
+      var card = document.getElementById("doneCard");
+      card.style.display = "block";
+      document.getElementById("doneMode").textContent =
+        r.mode === "live" ? "" :
+        "Note: saved on this device only — our live intake connection is being switched on. " +
+        "So nothing waits on us, text the same details to (838) 304-3003 and we'll take it from there.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+})();
+</script>
+</body>
+</html>
