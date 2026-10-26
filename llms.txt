@@ -1,0 +1,16 @@
+# Lot & Loaded
+
+Lot & Loaded originates off-market commercial parcels — industrial land, redevelopment and teardown sites — and puts them under contract at 65% of builder value. Builders are qualified on closing pace and see deals that fit their buy box. Partners register parcels with the house, locked for 30 days, and keep 50% of the collected fee. Free to join; the house makes money when deals close.
+
+## Key facts
+- Off-market commercial land and teardown sites, priced at 65% of builder value
+- Buyer qualification is based on closing pace; qualification takes about three minutes
+- Partner-registered parcels are locked to the registering partner for 30 days
+- Partners keep 50% of the fee the house collects on their deals
+- Owners can sell directly: cash, as-is, no listing, no broker fees
+
+## Pages
+- [Lot & Loaded — Off-Market Commercial Land, Priced Right](https://santi856.github.io/lot-and-loaded/index.html)
+- [Builders — Get Qualified | Lot & Loaded](https://santi856.github.io/lot-and-loaded/builders.html)
+- [Partners — Register a Parcel | Lot & Loaded](https://santi856.github.io/lot-and-loaded/partners.html)
+- [Sell Your Property | Lot & Loaded](https://santi856.github.io/lot-and-loaded/sell.html)
