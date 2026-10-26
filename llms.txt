@@ -14,3 +14,6 @@ Lot & Loaded originates off-market commercial parcels — industrial land, redev
 - [Builders — Get Qualified | Lot & Loaded](https://santi856.github.io/lot-and-loaded/builders.html)
 - [Partners — Register a Parcel | Lot & Loaded](https://santi856.github.io/lot-and-loaded/partners.html)
 - [Sell Your Property | Lot & Loaded](https://santi856.github.io/lot-and-loaded/sell.html)
+- [Sample Deal Packet | Lot & Loaded](https://santi856.github.io/lot-and-loaded/sample-deal.html)
+- [Terms | Lot & Loaded](https://santi856.github.io/lot-and-loaded/terms.html)
+- [Privacy | Lot & Loaded](https://santi856.github.io/lot-and-loaded/privacy.html)
